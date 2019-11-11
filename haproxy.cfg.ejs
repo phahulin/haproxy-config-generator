@@ -87,7 +87,8 @@ frontend explorer
     http-request redirect code <%= net_conf.redirect.code || 307 %> location <%= net_conf.redirect.location.split('$PATH_WO_PREFIX').join(`%[url,regsub(^/${net_type}/${net_name},)]`) %> if is_<%= net_type %>_<%= net_name %>
 <%_         } else if (net_conf.aliases) { _%>
 <%_             for (let alias of net_conf.aliases) { _%>
-    http-request redirect code 308 location "https://%[hdr(host)]%[url,regsub(^/<%= net_type %>/<%= alias %>,/<%= net_type %>/<%= net_name %>,)]\r\nX-Frame-Options: ALLOWALL\r\nAccess-Control-Allow-Origin: *" if path_beg -i /<%= net_type %>/<%= alias %>
+    acl is_<%= net_type %>_<%= alias %> path_beg -i /<%= net_type %>/<%= alias %>
+    http-request redirect code 308 location "https://%[hdr(host)]%[url,regsub(^/<%= net_type %>/<%= alias %>,/<%= net_type %>/<%= net_name %>,)]\r\nX-Frame-Options: ALLOWALL\r\nAccess-Control-Allow-Origin: *" if is_<%= net_type %>_<%= alias %>
 <%_             } _%>
 <%_         } else { _%>
     use_backend <%= net_type %>_<%= net_name %> if is_<%= net_type %>_<%= net_name %>
@@ -116,6 +117,7 @@ backend <%= net_type %>_<%= net_name %>
     mode http
 
     #Backend queries should not have network prefix, so we delete it
+    acl is_<%= net_type %>_<%= net_name %> path_beg -i /<%= net_type %>/<%= net_name %>
     reqirep ^([^\ ].*)<%= net_type %>/<%= net_name %>[/]?(.*) \1\2 if is_<%= net_type %>_<%= net_name %>
 
     #Setting headers to mask our query
@@ -148,7 +150,7 @@ backend <%= net_type %>_<%= net_name %>_ws
 
     #Server list. Format:
     #server <name> <address>:<port> cookie <network_name> check inter 60000 fastinter 1000 fall 3 rise 3 check inter 60000 fastinter 1000 fall 3 rise 3 ssl verify none maxconn 30000
-    server default <%= net_conf.host %>:<%= net_conf.port %> <%= net_type %>_<%= net_name %> <%= net_conf.valid_ssl? 'check-ssl':'check' %> inter 60000 fastinter 1000 fall 3 rise 3 maxconn 30000 ssl verify none
+    server default <%= net_conf.host %>:<%= net_conf.port %> cookie <%= net_type %>_<%= net_name %> <%= net_conf.valid_ssl? 'check-ssl':'check' %> inter 60000 fastinter 1000 fall 3 rise 3 maxconn 30000 ssl verify none
 
 <%_     }) _%>
 <%_ }) _%>
