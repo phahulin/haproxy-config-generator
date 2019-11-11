@@ -1,9 +1,14 @@
 "use strict";
 
 module.exports = {
-    // StatsAuth: 'user:NxgYjfYdqh2mE4',
-    StatsUri: '/gQVQBBbRep9zoIBiA8jEi0vbrWCleeJ1dx0BQ6Iy',
-    ContentSecurityPolicySrcs: {
+    // stats_auth: 'user:NxgYjfYdqh2mE4',
+    stats_uri: '/gQVQBBbRep9zoIBiA8jEi0vbrWCleeJ1dx0BQ6Iy',
+    ssl_cert_path: '/etc/ssl/private/cloudflare-origin.pem',
+    default_endpoint: {
+        net_type: 'poa',
+        net_name: 'xdai'
+    },
+    content_security_policy_srcs: {
         "connect-src": [
             "'self'",
             "wss://*.blockscout.com",
