@@ -85,12 +85,11 @@ frontend explorer
     acl is_cookie_<%= net_type %>_<%= net_name %> hdr_sub(cookie) network=<%= net_type %>_<%= net_name %>
 <%_         if (net_conf.redirect) { _%>
     http-request redirect code <%= net_conf.redirect.code || 307 %> location <%= net_conf.redirect.location.split('$PATH_WO_PREFIX').join(`%[url,regsub(^/${net_type}/${net_name},)]`) %> if is_<%= net_type %>_<%= net_name %>
-<%_         } else if (net_conf.aliases) { _%>
-<%_             for (let alias of net_conf.aliases) { _%>
+    <%_     } else { _%>
+<%_             if (net_conf.aliases) for (let alias of net_conf.aliases) { _%>
     acl is_<%= net_type %>_<%= alias %> path_beg -i /<%= net_type %>/<%= alias %>
     http-request redirect code 308 location "https://%[hdr(host)]%[url,regsub(^/<%= net_type %>/<%= alias %>,/<%= net_type %>/<%= net_name %>,)]\r\nX-Frame-Options: ALLOWALL\r\nAccess-Control-Allow-Origin: *" if is_<%= net_type %>_<%= alias %>
 <%_             } _%>
-<%_         } else { _%>
     use_backend <%= net_type %>_<%= net_name %> if is_<%= net_type %>_<%= net_name %>
     use_backend <%= net_type %>_<%= net_name %>_ws if is_websocket is_cookie_<%= net_type %>_<%= net_name %>
 <%_         } _%>
