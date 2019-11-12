@@ -1,8 +1,8 @@
 "use strict";
 
 module.exports = {
-    // stats_auth: 'user:NxgYjfYdqh2mE4',
     stats_uri: '/gQVQBBbRep9zoIBiA8jEi0vbrWCleeJ1dx0BQ6Iy',
+    // stats_auth: 'user:NxgYjfYdqh2mE4',
     ssl_cert_path: '/etc/ssl/private/cloudflare-origin.pem',
     default_endpoint: {
         net_type: 'poa',

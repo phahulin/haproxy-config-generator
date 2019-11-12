@@ -85,7 +85,7 @@ frontend explorer
     acl is_cookie_<%= net_type %>_<%= net_name %> hdr_sub(cookie) network=<%= net_type %>_<%= net_name %>
 <%_         if (net_conf.redirect) { _%>
     http-request redirect code <%= net_conf.redirect.code || 307 %> location <%= net_conf.redirect.location.split('$PATH_WO_PREFIX').join(`%[url,regsub(^/${net_type}/${net_name},)]`) %> if is_<%= net_type %>_<%= net_name %>
-    <%_     } else { _%>
+<%_         } else { _%>
 <%_             if (net_conf.aliases) for (let alias of net_conf.aliases) { _%>
     acl is_<%= net_type %>_<%= alias %> path_beg -i /<%= net_type %>/<%= alias %>
     http-request redirect code 308 location "https://%[hdr(host)]%[url,regsub(^/<%= net_type %>/<%= alias %>,/<%= net_type %>/<%= net_name %>,)]\r\nX-Frame-Options: ALLOWALL\r\nAccess-Control-Allow-Origin: *" if is_<%= net_type %>_<%= alias %>
@@ -127,9 +127,8 @@ backend <%= net_type %>_<%= net_name %>
     #Specifying cookie to insert
     cookie network insert
 
-    #Server list. Format:
-    #server <name> <address>:<port> cookie <network_name> check inter 60000 fastinter 1000 fall 3 rise 3 ssl verify none
-    server default <%= net_conf.host %>:<%= net_conf.port %> cookie <%= net_type %>_<%= net_name %> <%= net_conf.ssl_check? 'check-ssl':'check' %> inter 60000 fastinter 1000 fall 3 rise 3 ssl verify none
+    #Servers list
+    server default <%= net_conf.host %>:<%= net_conf.port %> cookie <%= net_type %>_<%= net_name %> <%= net_conf.valid_ssl? 'check-ssl':'check' %> inter 60000 fastinter 1000 fall 3 rise 3 ssl verify none
 
 backend <%= net_type %>_<%= net_name %>_ws
     #Check if WebSocket request is correct
@@ -147,8 +146,7 @@ backend <%= net_type %>_<%= net_name %>_ws
     #Specifying cookie to insert
     cookie network insert
 
-    #Server list. Format:
-    #server <name> <address>:<port> cookie <network_name> check inter 60000 fastinter 1000 fall 3 rise 3 check inter 60000 fastinter 1000 fall 3 rise 3 ssl verify none maxconn 30000
+    #Servers list
     server default <%= net_conf.host %>:<%= net_conf.port %> cookie <%= net_type %>_<%= net_name %> <%= net_conf.valid_ssl? 'check-ssl':'check' %> inter 60000 fastinter 1000 fall 3 rise 3 maxconn 30000 ssl verify none
 
 <%_     }) _%>

@@ -9,16 +9,16 @@ module.exports = {
         nets: {
             core: {
                 host: '35.169.195.82',
-                port: '4000',
+                port: 4000,
             },
             sokol: {
                 host: '52.206.143.149',
-                port: '4000',
+                port: 4000,
             },
             xdai: {
                 aliases: ['dai'],
                 host: '3.231.47.141',
-                port: '4000',
+                port: 4000,
             },
         },
     },
@@ -27,7 +27,7 @@ module.exports = {
         nets: {
             kovan: {
                 host: '52.72.221.22',
-                port: '4000',
+                port: 4000,
             },
             ropsten: {
                 redirect: {
@@ -49,7 +49,7 @@ module.exports = {
             },
             mainnet: {
                 host: '3.232.138.54',
-                port: '4000',
+                port: 4000,
             },
         },
     },
@@ -58,7 +58,7 @@ module.exports = {
         nets: {
             mainnet: {
                 host: '54.146.157.206',
-                port: '4000',
+                port: 4000,
             },
         },
     },
@@ -67,7 +67,7 @@ module.exports = {
         nets: {
             l14: {
                 host: '100.25.92.109',
-                port: '4000',
+                port: 4000,
             },
         },
     },
@@ -76,7 +76,7 @@ module.exports = {
         nets: {
             mainnet: {
                 host: '34.227.216.167',
-                port: '4000',
+                port: 4000,
             },
         },
     },
@@ -85,13 +85,13 @@ module.exports = {
         nets: {
             sigma1: {
                 host: 'explorer.sigma1.artis.network',
-                port: '443',
+                port: 443,
                 // send headers with https and do health checks over https
                 valid_ssl: true,
             },
             tau1: {
                 host: 'explorer.tau1.artis.network',
-                port: '443',
+                port: 443,
                 valid_ssl: true,
             },
         },
